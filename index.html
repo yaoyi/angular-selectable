@@ -1,0 +1,104 @@
+<html ng-app="demo">
+	<head>
+		<link rel="stylesheet" href="css/jquery.dragToSelect.css">
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+		<style>
+			* {
+			  -webkit-user-select: none;
+			  -moz-user-select: none;
+			  -ms-user-select: none;
+			  -user-select: none;
+			}
+			.wrapper {
+				position: relative;
+				overflow: auto;
+				padding-bottom: 20px;
+			}
+			.item {
+				position: relative;
+				display: inline-block;
+				margin: 5px;
+				width: 100px;
+				height: 100px;
+				border: 1px solid #bbb;
+			}
+
+			.item.selected {
+				border: 1px solid red;
+			}
+
+			.item i {
+			    position: absolute;
+			    top: 40%;
+			    left: 40%;
+			    font-size: 20px;
+			    display: none;
+			    cursor: pointer;
+			}
+
+			.item:hover i {
+				display: block;
+			}
+
+			.item.selected i {
+				color: red;
+				display: block;
+			}
+
+			.splitter {
+				border-bottom: 1px solid #F37373;
+			}
+
+		</style>
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+		<script src="js/jquery.dragToSelect.js"></script>
+		<script src="js/selectable.js"></script>
+		<script type="text/javascript">
+			var demo = angular.module('demo', ['ui.selectable'])
+			demo.controller('DemoCtrl', ['$scope','selectable', function($scope, selectable){
+				$scope.defaultSelected = selectable.get()
+				$scope.customSelected = selectable.get('custom')
+				$scope.photos = []
+				for(var i = 0; i < 30; i++){
+					var photo = {
+						id: i
+					}
+					$scope.photos.push(photo)
+				}
+				$scope.unselectAll = function(id){
+					selectable.clear(id)
+				}
+			}])
+		</script>
+	</head>
+	<body ng-controller="DemoCtrl">
+		<h1>Select Set 1</h1>
+		<div>selected: {{defaultSelected}}</div>
+		<!-- <button ng-click="unselectAll()">unselect all</button> -->
+		<div class="wrapper" 
+			pf-selectable
+			data-items="photos"
+			data-cancel="i">
+			<div ng-repeat="item in photos" 
+				class="item"
+				pf-select="item.id">
+				<i class="fa fa-check" pf-select-by-click="item.id"></i>
+			</div>
+		</div>
+		<div class="splitter"></div>
+		<h1>Select Set 2</h1>
+		<div>selected: {{customSelected}}</div>
+		<!-- <button ng-click="unselectAll('custom')">unselect all</button> -->
+		<div class="wrapper" 
+			pf-selectable="custom"
+			data-items="photos"
+			data-cancel="i">
+			<div ng-repeat="item in photos" 
+				class="item"
+				pf-select="item.id">
+				<i class="fa fa-check" pf-select-by-click="item.id"></i>
+			</div>
+		</div>
+	</body>
+</html>
